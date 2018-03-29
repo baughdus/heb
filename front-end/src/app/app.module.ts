@@ -7,8 +7,6 @@ import { SearchComponent } from './search/search.component';
 
 import {Angular2FontawesomeModule} from 'angular2-fontawesome';
 import {MongoProductsService} from './services/mongo-products.service';
-import {MysqlProductsService} from './services/mysql-products.service';
-import {OracleProductsService} from './services/oracle-products.service';
 import {FormsModule} from '@angular/forms';
 import {CapitalizeEachFirstLetterPipe} from './pipes/capitalize-each-first-letter.pipe';
 
@@ -26,9 +24,7 @@ import {CapitalizeEachFirstLetterPipe} from './pipes/capitalize-each-first-lette
     FormsModule
   ],
   providers: [
-    MongoProductsService,
-    MysqlProductsService,
-    OracleProductsService
+    MongoProductsService
   ],
   bootstrap: [AppComponent]
 })

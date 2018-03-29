@@ -10,37 +10,37 @@ import {DatePipe} from '@angular/common';
 })
 export class SearchComponent implements OnInit {
 
-  results: any[];
-
-  multiDate = false;
-  multiShelfLife = false;
-  multiPrice = false;
-  multiCost = false;
+  results;
 
   productRequest = {
     'description': null,
-
-    'lastSold': null,
-    'minLastSold': null,
-    'maxLastSold': null,
-
-    'shelfLife': null,
-    'minShelfLife': null,
-    'maxShelfLife': null,
-
-    'department': '',
-
-    'price': null,
-    'minPrice': null,
-    'maxPrice': null,
-
+    'lastSold': {
+      'isMulti': false,
+      'value': null,
+      'min': null,
+      'max': null
+    },
+    'shelfLife': {
+      'isMulti': false,
+      'value': null,
+      'min': null,
+      'max': null
+    },
+    'department': null,
+    'price': {
+      'isMulti': false,
+      'value': null,
+      'min': null,
+      'max': null
+    },
     'unit': null,
-
     'xFor': null,
-
-    'cost': null,
-    'minCost': null,
-    'maxCost': null
+    'cost': {
+      'isMulti': false,
+      'value': null,
+      'min': null,
+      'max': null
+    }
   };
 
   constructor(private mongo: MongoProductsService, private date: DatePipe) {
@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit {
     this.mongo.getAll().subscribe(res => {
       this.results = res;
     }, err => {
-
+      console.log(err);
     });
   }
 
@@ -66,39 +66,39 @@ export class SearchComponent implements OnInit {
    * Below 4 methods are simply for change the button and visible search entries
    */
   changeMultiDate() {
-    this.multiDate = !this.multiDate;
-    if (this.productRequest.lastSold) {
-      this.productRequest.lastSold = null;
+    this.productRequest.lastSold.isMulti = !this.productRequest.lastSold.isMulti;
+    if (this.productRequest.lastSold.isMulti) {
+      this.productRequest.lastSold.value = null;
     } else {
-      this.productRequest.minLastSold = null;
-      this.productRequest.maxLastSold = null;
+      this.productRequest.lastSold.min = null;
+      this.productRequest.lastSold.max = null;
     }
   }
   changeMultiShelfLife() {
-    this.multiShelfLife = !this.multiShelfLife;
-    if (this.productRequest.shelfLife) {
-      this.productRequest.shelfLife = null;
+    this.productRequest.shelfLife.isMulti = !this.productRequest.shelfLife.isMulti;
+    if (this.productRequest.shelfLife.isMulti) {
+      this.productRequest.shelfLife.value = null;
     } else {
-      this.productRequest.minShelfLife = null;
-      this.productRequest.maxShelfLife = null;
+      this.productRequest.shelfLife.min = null;
+      this.productRequest.shelfLife.max = null;
     }
   }
   changeMultiPrice() {
-    this.multiPrice = !this.multiPrice;
-    if (this.productRequest.price) {
-      this.productRequest.price = null;
+    this.productRequest.price.isMulti = !this.productRequest.price.isMulti;
+    if (this.productRequest.price.isMulti) {
+      this.productRequest.price.value = null;
     } else {
-      this.productRequest.minPrice = null;
-      this.productRequest.maxPrice = null;
+      this.productRequest.price.min = null;
+      this.productRequest.price.max = null;
     }
   }
   changeMultiCost() {
-    this.multiCost = !this.multiCost;
-    if (this.productRequest.cost) {
-      this.productRequest.cost = null;
+    this.productRequest.cost.isMulti = !this.productRequest.cost.isMulti;
+    if (this.productRequest.cost.isMulti) {
+      this.productRequest.cost.value = null;
     } else {
-      this.productRequest.minCost = null;
-      this.productRequest.maxCost = null;
+      this.productRequest.cost.min = null;
+      this.productRequest.cost.max = null;
     }
   }
 
@@ -109,12 +109,23 @@ export class SearchComponent implements OnInit {
     let tmpRequest = { ...this.productRequest};
     Object.keys(tmpRequest).forEach(key => {
       let value = tmpRequest[key];
-      if (value === null || value === '') {
+      if (value === null) {
         delete tmpRequest[key];
-      } else if (key.toLocaleLowerCase().indexOf('sold') > -1) {
-        tmpRequest[key] = this.date.transform(tmpRequest[key], 'yyyy-MM-dd HH:mm:ss.SSS');
+      } else if (value.hasOwnProperty('isMulti')) {
+        if (!value.value && !value.max && !value.min) {
+          delete tmpRequest[key];
+        } else if (key === 'lastSold') {
+          let lastSold = {
+              'isMulti': tmpRequest[key].isMulti,
+              'value': tmpRequest[key].value !== null ? this.date.transform(tmpRequest[key].value, 'yyyy-MM-dd HH:mm:ss.SSS') : null,
+              'min': tmpRequest[key].min !== null ? this.date.transform(tmpRequest[key].min, 'yyyy-MM-dd HH:mm:ss.SSS') : null,
+              'max': tmpRequest[key].max !== null ? this.date.transform(tmpRequest[key].max, 'yyyy-MM-dd HH:mm:ss.SSS') : null
+          };
+          tmpRequest[key] = lastSold;
+        }
       }
     });
+    console.log(this.productRequest, tmpRequest);
     return tmpRequest;
   }
 }
