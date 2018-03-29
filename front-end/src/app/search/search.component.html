@@ -1,0 +1,156 @@
+<div class="search-container">
+  <table align="center" class="table-condensed">
+    <tr>
+
+      <!-- DESCRIPTION INPUT -->
+      <td><label for="description" style="font-size: 24px">Description</label></td>
+      <td><input type="text" class="form-control" id="description" placeholder="Description" [(ngModel)]="productRequest.description"></td>
+
+      <!-- PRICE INPUT -->
+      <td><label for="price" style="font-size: 24px">Price</label></td>
+      <td style="display: flex; width: 100%;">
+        <div class="input-group" style="display: flex; width: 100%;">
+
+          <!-- SINGLE DATE SEARCH -->
+          <input *ngIf="!multiPrice" type="number" min="0" step="0.01" data-number-to-fixed="2"
+                 data-number-stepfactor="100" class="form-control currency" id="price" placeholder="1.00" [(ngModel)]="productRequest.price">
+
+          <!-- MULTI DATE SEARCH, SPECIFICALLY MIN/MAX -->
+          <label *ngIf="multiPrice" for="minPrice">MIN</label>
+          <input *ngIf="multiPrice" type="number" min="0" step="0.01" data-number-to-fixed="2"
+                 data-number-stepfactor="100" class="form-control currency" id="minPrice" placeholder="1.00" [(ngModel)]="productRequest.minPrice">
+          <label *ngIf="multiPrice" for="maxPrice">MAX</label>
+          <input *ngIf="multiPrice" type="number" min="0" step="0.01" data-number-to-fixed="2"
+                 data-number-stepfactor="100" class="form-control currency" id="maxPrice" placeholder="1.00" [(ngModel)]="productRequest.maxPrice">
+        </div>
+
+        <!-- BUTTON TO CHANGE BETWEEN SINGLE VALUE OR MIN/MAX VALUES -->
+        <button (click)="changeMultiPrice()" type="button" class="btn btn-default"><i class="fa fa-exchange" [ngClass]="{'active': multiPrice===true}"></i></button>
+      </td>
+    </tr>
+    <tr>
+      <!-- LAST SOLD INPUT -->
+      <td><label for="lastSold" style="font-size: 24px">Last Sold</label></td>
+      <td style="display: inline-flex; width: 100%;">
+        <div class="input-group" style="display: inline-flex; width: 100%;">
+
+          <!-- SINGLE DATE SEARCH -->
+          <input *ngIf="!multiDate" type="date" class="form-control" id="lastSold" placeholder="Last Sold" [(ngModel)]="productRequest.lastSold">
+
+          <!-- MULTI DATE SEARCH, SPECIFICALLY MIN/MAX -->
+          <label *ngIf="multiDate" for="minLastSold">MIN</label>
+          <input *ngIf="multiDate" type="date" class="form-control" id="minLastSold" placeholder="Last Sold" [(ngModel)]="productRequest.minLastSold">
+          <label *ngIf="multiDate" for="maxLastSold">MAX</label>
+          <input *ngIf="multiDate" type="date" class="form-control" id="maxLastSold" placeholder="Last Sold" [(ngModel)]="productRequest.maxLastSold">
+        </div>
+
+        <!-- BUTTON TO CHANGE BETWEEN SINGLE VALUE OR MIN/MAX VALUES -->
+        <button (click)="changeMultiDate()" type="button" class="btn btn-default"><i class="fa fa-exchange"
+                                                                                     [ngClass]="{'active': multiDate===true}"></i>
+        </button>
+
+      </td>
+
+      <!-- UNIT INPUT -->
+      <td><label for="unit" style="font-size: 24px">Unit</label></td>
+      <td>
+        <select id="unit" class="form-control" [(ngModel)]="productRequest.unit">
+          <option value="null">None Selected</option>
+          <option value="lb">Pounds</option>
+          <option value="Each">Each</option>
+        </select></td>
+    </tr>
+    <tr>
+
+      <!-- SHELF LIFE INPUT -->
+      <td><label for="shelfLife" style="font-size: 24px">Shelf Life</label></td>
+      <td style="display: flex;">
+
+        <!-- SINGLE DATE SEARCH -->
+        <input *ngIf="!multiShelfLife" type="number" class="form-control" id="shelfLife"
+               placeholder="Shelf Life (# Of Days)" [(ngModel)]="productRequest.shelfLife">
+
+        <!-- MULTI DATE SEARCH, SPECIFICALLY MIN/MAX -->
+        <label *ngIf="multiShelfLife" for="minShelfLife">MIN</label>
+        <input *ngIf="multiShelfLife" type="number" class="form-control" id="minShelfLife"
+               placeholder="Shelf Life (# Of Days)" [(ngModel)]="productRequest.minShelfLife">
+        <label *ngIf="multiShelfLife" for="maxShelfLife">MAX</label>
+        <input *ngIf="multiShelfLife" type="number" class="form-control" id="maxShelfLife"
+               placeholder="Shelf Life (# Of Days)" [(ngModel)]="productRequest.maxShelfLife">
+
+        <!-- BUTTON TO CHANGE BETWEEN SINGLE VALUE OR MIN/MAX VALUES -->
+        <button (click)="changeMultiShelfLife()" type="button" class="btn btn-default"><i class="fa fa-exchange"
+                                                                                          [ngClass]="{'active': multiShelfLife===true}"></i>
+        </button>
+      </td>
+
+      <!-- COST INPUT -->
+      <td><label for="cost" style="font-size: 24px">Cost</label></td>
+      <td style="display: flex; width: 100%;">
+        <div class="input-group" style="display: flex; width: 100%;">
+
+          <!-- SINGLE DATE SEARCH -->
+          <input *ngIf="!multiCost" type="number" min="0" step="0.01" data-number-to-fixed="2"
+                 data-number-stepfactor="100" class="form-control currency" id="cost" placeholder="1.00" [(ngModel)]="productRequest.cost">
+
+          <!-- MULTI DATE SEARCH, SPECIFICALLY MIN/MAX -->
+          <label *ngIf="multiCost" for="minCost">MIN</label>
+          <input *ngIf="multiCost" type="number" min="0" step="0.01" data-number-to-fixed="2"
+                 data-number-stepfactor="100" class="form-control currency" id="minCost" placeholder="1.00" [(ngModel)]="productRequest.minCost">
+          <label *ngIf="multiCost" for="maxCost">MAX</label>
+          <input *ngIf="multiCost" type="number" min="0" step="0.01" data-number-to-fixed="2"
+                 data-number-stepfactor="100" class="form-control currency" id="maxCost" placeholder="1.00" [(ngModel)]="productRequest.maxCost">
+        </div>
+
+        <!-- BUTTON TO CHANGE BETWEEN SINGLE VALUE OR MIN/MAX VALUES -->
+        <button (click)="changeMultiCost()" type="button" class="btn btn-default"><i class="fa fa-exchange"
+                                                                                     [ngClass]="{'active': multiCost===true}"></i>
+        </button>
+      </td>
+    </tr>
+    <tr>
+
+      <!-- DEPARTMENT INPUT -->
+      <td><label for="department" style="font-size: 24px">Department</label></td>
+      <td>
+        <select id="department" class="form-control" [(ngModel)]="productRequest.department">
+          <option value="">None Selected</option>
+          <option value="Produce">Produce</option>
+          <option value="Grocery">Grocery</option>
+          <option value="Pharmacy">Pharmacy</option>
+        </select>
+      </td>
+
+      <td><!-- EMPTY COLUMN --></td>
+
+      <!-- SEARCH BUTTON -->
+      <td>
+        <button type="button" class="btn btn-danger" style="font-size: 16px" (click)="search()">Search</button>
+      </td>
+    </tr>
+  </table>
+</div>
+<div class="results-container">
+  <table *ngIf="results" align="center" class="table table-hover">
+    <thead>
+    <tr>
+      <th style="font-size: 20px; text-align: center">Description</th>
+      <th style="font-size: 20px; text-align: center">Last Sold</th>
+      <th style="font-size: 20px; text-align: center">Shelf Life</th>
+      <th style="font-size: 20px; text-align: center">Department</th>
+      <th style="font-size: 20px; text-align: center">Price</th>
+      <th style="font-size: 20px; text-align: center">Unit</th>
+      <th style="font-size: 20px; text-align: center">Cost</th>
+    </tr>
+    </thead>
+    <tr *ngFor="let result of results">
+      <td>{{result.description | capitalizeEachFirstLetter}}</td>
+      <td>{{result.lastSold | date:'MM/dd/yyyy'}}</td>
+      <td>{{result.shelfLife}} Days</td>
+      <td>{{result.department}}</td>
+      <td>{{result.price | currency}}</td>
+      <td>{{result.unit}}</td>
+      <td>{{result.cost | currency}}</td>
+    </tr>
+  </table>
+</div>
