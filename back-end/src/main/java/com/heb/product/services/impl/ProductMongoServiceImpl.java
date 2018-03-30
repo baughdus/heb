@@ -40,16 +40,17 @@ public class ProductMongoServiceImpl implements ProductMongoService {
 
                     // Cast field into a MultiRequest object
                     MultiRequest multiRequest = (MultiRequest) field.get(request);
-
-                    // Check if the request is a max/min
-                    if (multiRequest.isMulti) {
-                        // Add Criteria to the Query
-                        query.addCriteria(Criteria.where(field.getName())
-                                .lte(multiRequest.max != null ? multiRequest.max : findMax(multiRequest.min))
-                                .gte(multiRequest.min != null ? multiRequest.min : findMin(multiRequest.max)));
-                    } else {
-                        // Add Criteria to the Query
-                        query.addCriteria(Criteria.where(field.getName()).is(multiRequest.value));
+                    if (multiRequest != null) {
+                        // Check if the request is a max/min
+                        if (multiRequest.isMulti) {
+                            // Add Criteria to the Query
+                            query.addCriteria(Criteria.where(field.getName())
+                                    .lte(multiRequest.max != null ? multiRequest.max : findMax(multiRequest.min))
+                                    .gte(multiRequest.min != null ? multiRequest.min : findMin(multiRequest.max)));
+                        } else {
+                            // Add Criteria to the Query
+                            query.addCriteria(Criteria.where(field.getName()).is(multiRequest.value));
+                        }
                     }
 
                 // Check if the current field is of the type MultiRequestDate
@@ -58,30 +59,32 @@ public class ProductMongoServiceImpl implements ProductMongoService {
 
                     // Cast field into a MultiRequestDate object
                     MultiRequestDate multiRequest = (MultiRequestDate) field.get(request);
-
-                    // Check if the request is a max/min
-                    if (multiRequest.isMulti) {
-                        // Add Criteria to the Query
-                        query.addCriteria(Criteria.where(field.getName())
-                                .lte(multiRequest.max != null ? multiRequest.max : new Date())
-                                .gte(multiRequest.min != null ? multiRequest.min : new Date(Long.MIN_VALUE)));
-                    } else {
-                        // Add Criteria to the Query
-                        query.addCriteria(Criteria.where(field.getName()).is(multiRequest.value));
+                    if (multiRequest != null) {
+                        // Check if the request is a max/min
+                        if (multiRequest.isMulti) {
+                            // Add Criteria to the Query
+                            query.addCriteria(Criteria.where(field.getName())
+                                    .lte(multiRequest.max != null ? multiRequest.max : new Date())
+                                    .gte(multiRequest.min != null ? multiRequest.min : new Date(Long.MIN_VALUE)));
+                        } else {
+                            // Add Criteria to the Query
+                            query.addCriteria(Criteria.where(field.getName()).is(multiRequest.value));
+                        }
                     }
                 // If request isn't of a max/min field, make sure it isn't null
                 } else if (field.get(request) != null) {
                     // Check if current field is a String (regex is required for Strings in MongoDB)
                     if (field.getType() == String.class) {
                         // Add Criteria to the Query with wildcards on each end of the String
+                        System.out.println(field.get(request).toString());
                         query.addCriteria(Criteria.where(field.getName()).regex(".*" + field.get(request).toString() + ".*"));
                     } else {
                         // Add Criteria to the Query
                         query.addCriteria(Criteria.where(field.getName()).is(field.get(request)));
                     }
                 }
-            } catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
+            } catch (IllegalAccessException e) {
+                System.out.println(e.getMessage());
             }
         }
 

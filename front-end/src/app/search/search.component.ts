@@ -43,6 +43,8 @@ export class SearchComponent implements OnInit {
     }
   };
 
+  defaultRequest = { ...this.productRequest};
+
   constructor(private mongo: MongoProductsService, private date: DatePipe) {
   }
 
@@ -59,7 +61,17 @@ export class SearchComponent implements OnInit {
     let request = this.convert();
     this.mongo.query(request).subscribe(res => {
       this.results = res;
+    }, err => {
+      console.log(err);
     });
+  }
+
+  reset() {
+    this.productRequest = { ...this.defaultRequest };
+    this.productRequest.cost.isMulti = false;
+    this.productRequest.price.isMulti = false;
+    this.productRequest.lastSold.isMulti = false;
+    this.productRequest.shelfLife.isMulti = false;
   }
 
   /**
