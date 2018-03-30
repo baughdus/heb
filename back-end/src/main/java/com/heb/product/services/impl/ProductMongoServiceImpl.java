@@ -76,7 +76,6 @@ public class ProductMongoServiceImpl implements ProductMongoService {
                     // Check if current field is a String (regex is required for Strings in MongoDB)
                     if (field.getType() == String.class) {
                         // Add Criteria to the Query with wildcards on each end of the String
-                        System.out.println(field.get(request).toString());
                         query.addCriteria(Criteria.where(field.getName()).regex(".*" + field.get(request).toString() + ".*"));
                     } else {
                         // Add Criteria to the Query
